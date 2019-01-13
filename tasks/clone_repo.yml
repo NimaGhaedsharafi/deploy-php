@@ -1,0 +1,9 @@
+---
+
+- name: Clone repo
+  git:
+    dest: "{{ new_release_dir }}"
+    repo: "{{ repo_url }}"
+    update: no
+    depth: 1
+  become: true

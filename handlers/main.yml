@@ -1,0 +1,7 @@
+---
+- name: Restart php-fpm
+  service:
+    name: php7.2-fpm
+    state: restarted
+  become: true
+  when: restart_fpm
