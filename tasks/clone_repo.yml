@@ -6,4 +6,5 @@
     repo: "{{ repo_url }}"
     update: no
     depth: 1
+    version: "{{ lookup('env','DEPLOY_TAG') or 'master' }}"
   become: true

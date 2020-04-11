@@ -1,0 +1,41 @@
+---
+
+- name: Get all releases dir
+  find:
+    paths: "{{ releases_dir }}"
+    file_type: directory
+  register: found_releases
+
+- name: Register latest release
+  set_fact:
+    latest_release: "{{ found_releases.files | sort(attribute='path',reverse=true) | first }}"
+  when: found_releases.examined|int > 0
+
+- name: Remove old env backup
+  file:
+    state: absent
+    path: "{{ latest_release.path }}/.env.bck"
+
+- name: Create a copy of current .env file
+  copy:
+    src: "{{ latest_release.path }}/.env"
+    dest: "{{ latest_release.path }}/.env.bck"
+    mode: 0400
+    owner: www-data
+    group: www-data
+    remote_src: yes
+    
+- name: Configure Laravel env file
+  template:
+    src: env.j2
+    dest: "{{ latest_release.path }}/.env"
+    mode: 0400
+    owner: www-data
+    group: www-data
+
+- name: Restart php-fpm
+  service:
+    name: php7.2-fpm
+    state: reloaded
+  become: true
+  when: restart_fpm

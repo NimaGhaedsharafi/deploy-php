@@ -1,8 +1,14 @@
 ---
 
+- name: Check if vendor directory exists
+  stat:
+    path: "{{ latest_release.path }}/vendor"
+  register: latest_vendor_directory_stat
+  when:  latest_release is defined
+
 - name: Copy vendor
-  shell: cp -r "{{ latest_release.path }}/vendor" "{{ new_release_dir }}/vendor"
-  when: copy_vendor and latest_release is defined
+  shell: cp -r -p "{{ latest_release.path }}/vendor" "{{ new_release_dir }}/vendor"
+  when: copy_vendor and latest_release is defined and latest_vendor_directory_stat.stat.exists == true
 
 - name: Install composer deps
   composer:

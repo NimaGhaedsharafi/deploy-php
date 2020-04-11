@@ -1,7 +1,7 @@
 ---
 
 - name: Get current build number
-  local_action: shell date +%Y-%m-%d-%H-%M-%S
+  command: "date +%Y-%m-%d-%H-%M-%S"
   register: current_time
   run_once: true
 

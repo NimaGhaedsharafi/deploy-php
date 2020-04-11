@@ -1,7 +1,8 @@
 ---
 
 - hosts: all
-
+  remote_user: root
+  become: true
   vars_files:
     - vars/main.yml
 
@@ -11,14 +12,15 @@
       - include: tasks/create_new_release_dir.yml
       - include: tasks/clone_repo.yml
       - include: tasks/mark_release.yml
+      - include: tasks/install_composer_deps.yml
       - include: tasks/set_owner_and_group.yml dir_to_chown="{{ new_release_dir }}"
       - include: tasks/set_correct_permissions.yml dir="{{ new_release_dir }}"
       - include: tasks/check_that_folder_is_writable.yml dir_to_check="{{ new_release_dir }}/bootstrap/cache"
       - include: tasks/link_storage.yml
-      - include: tasks/install_composer_deps.yml
       - include: tasks/link_env.yml
-      - include: tasks/migrate_db.yml
+      # - include: tasks/migrate_db.yml
       - include: tasks/bless_new_release.yml
       - include: tasks/leave_most_10_recent_releases.yml
+      # - include: tasks/inform_newrelic.yml
       rescue:
         - include: tasks/rollback.yml

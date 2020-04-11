@@ -1,0 +1,16 @@
+---
+
+- name: Check if old env exists
+  stat:
+    path: "{{ latest_release }}/.env.bck"
+  register: old_env_exists
+
+- name: Rollback .env
+  copy:
+    src: "{{ latest_release }}/.env.bck"
+    dst: "{{ latest_release }}/.env"
+    mode: 0400
+    owner: www-data
+    group: www-data
+    remote_src: yes
+    when: old_env_exists.stat.stat.exists == true
