@@ -28,3 +28,8 @@ copy_vendor: true
 # Does deployment needs to restart fpm?
 restart_fpm: true
 
+# Does deployment needs to inform new-relic?
+newrelic_inform: true
+# Newrelic configuration
+newrelic_app_id: app_id_goes_here
+newrelic_api_key: api_key_goes_here

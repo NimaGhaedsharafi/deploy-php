@@ -1,0 +1,15 @@
+---
+- name: Inform new-relic
+  environment:
+    http_proxy: http://127.0.0.1/
+    https_proxy: http://127.0.0.1/
+  uri:
+    url: https://api.newrelic.com/v2/applications/{{ newrelic_app_id }}/deployments.json
+    method: POST
+    headers:
+      X-Api-Key: "{{ newrelic_api_key }}"
+      Content-Type: "application/json"
+    body_format: json
+    body: {"deployment": {"user": "ansible", "description": "", "revision": "master", "changelog": ""}} 
+    status_code: 201 
+    when: newrelic_inform
